@@ -19,8 +19,8 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("com.space")
-//@ComponentScan("com.space.controller")
+//@ComponentScan("com.space")
+@ComponentScan("com.space.controller")
 public class WebConfig implements WebMvcConfigurer {
 
 

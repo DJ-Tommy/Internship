@@ -1,11 +1,17 @@
 package com.space.model;
 
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "ship")
 public class Ship {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;            //Ship ID
     private String name;        //Ship name (maximum of 50 characters)
     private String planet;      //Parking planet (maximum of 50 characters)
+    @Enumerated(EnumType.STRING)
     private ShipType shipType;  //Type of the Ship
     private Date prodDate;      //Release date (should be between 2800 and 3019)
     private Boolean isUsed;     //The Ship is Used or New?
@@ -16,24 +22,19 @@ public class Ship {
     public Ship() {
     }
 
-    public Ship(Long id, String name, String planet, ShipType shipType, Date prodDate, Boolean isUsed, Double speed, Integer crewSize) {
+    public Ship(String name, String planet, ShipType shipType, Date prodDate, Boolean isUsed, Double speed, Integer crewSize) {
         setName(name);
         setPlanet(planet);
         setShipType(shipType);
         setProdDate(prodDate);
-        setUsed(isUsed);
+        setIsUsed(isUsed);
         setSpeed(speed);
         setCrewSize(crewSize);
-        createID();
-        countRating();
+        createRating();
     }
 
     public Long getId() {
         return id;
-    }
-
-    private void createID() {
-        id = 3L;
     }
 
     public String getName() {
@@ -72,8 +73,12 @@ public class Ship {
         return isUsed;
     }
 
-    public void setUsed(Boolean used) {
-        isUsed = used;
+    public void setIsUsed(Boolean isUsed) {
+        this.isUsed = isUsed;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Double getSpeed() {
@@ -96,10 +101,29 @@ public class Ship {
         return rating;
     }
 
-    private void countRating() {
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    private void createRating() {
         Date date = new Date();
         double k = isUsed ? 0.5 : 1.0;
         int yearNow = date.getYear() + 1000;
         rating = 80 * speed * k / (yearNow - prodDate.getYear() + 1);
+    }
+
+    @Override
+    public String toString() {
+        return "Ship{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", planet='" + planet + '\'' +
+                ", shipType=" + shipType +
+                ", prodDate=" + prodDate +
+                ", isUsed=" + isUsed +
+                ", speed=" + speed +
+                ", crewSize=" + crewSize +
+                ", rating=" + rating +
+                '}';
     }
 }
