@@ -172,7 +172,7 @@ public class ShipService {
         ship.updateRating();
         ship = shipRepository.save(ship);
 
-        ship.setId(41L);
+//        ship.setId(41L);
         return ship;
     }
 }
