@@ -57,4 +57,5 @@ public class ShipInfoTest {
     public int hashCode() {
         return Objects.hash(id, name, planet, shipType, prodDate, isUsed, speed, crewSize, rating);
     }
+
 }

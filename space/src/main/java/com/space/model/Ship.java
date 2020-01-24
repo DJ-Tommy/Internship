@@ -1,13 +1,15 @@
 package com.space.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 @Entity
-@Table(name = "ship")
+//@Table(name = "ship")
 public class Ship {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "increment")
     private Long id;            //Ship ID
     private String name;        //Ship name (maximum of 50 characters)
     private String planet;      //Parking planet (maximum of 50 characters)
@@ -30,11 +32,15 @@ public class Ship {
         setIsUsed(isUsed);
         setSpeed(speed);
         setCrewSize(crewSize);
-        createRating();
+        updateRating();
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -73,12 +79,16 @@ public class Ship {
         return isUsed;
     }
 
-    public void setIsUsed(Boolean isUsed) {
-        this.isUsed = isUsed;
+    public Boolean getIsUsed() {
+        return isUsed;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Boolean isUsed() {
+        return isUsed;
+    }
+
+    public void setIsUsed(Boolean isUsed) {
+        this.isUsed = isUsed;
     }
 
     public Double getSpeed() {
@@ -105,11 +115,19 @@ public class Ship {
         this.rating = rating;
     }
 
-    private void createRating() {
+    public void updateRating() {
         Date date = new Date();
-        double k = isUsed ? 0.5 : 1.0;
-        int yearNow = date.getYear() + 1000;
-        rating = 80 * speed * k / (yearNow - prodDate.getYear() + 1);
+        double k;
+        if (isUsed == null || !isUsed) {
+            k = 1.0;
+        } else {
+            k = 0.5;
+        }
+        int yearNow = 3019 - 1900;
+        rating = 80 * speed * k / (double) (yearNow - prodDate.getYear() + 1.0);
+        BigDecimal bd = new BigDecimal(Double.toString(rating));
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        rating = bd.doubleValue();
     }
 
     @Override

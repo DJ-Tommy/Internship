@@ -9,4 +9,6 @@ public interface ShipRepository extends JpaRepository<Ship, Long> {
 
     List<Ship> findAllByNameContainsAndPlanetContains(String name, String planet);
 
+    Ship findFirstById(Long id);
+
 }

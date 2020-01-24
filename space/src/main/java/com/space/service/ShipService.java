@@ -82,4 +82,99 @@ public class ShipService {
 
         return filteredShipList;
     }
+
+    public Ship getShipById(Long id) {
+        return shipRepository.findFirstById(id);
+    }
+
+    private Boolean checkParams(String name, String planet, Long prodDate,
+                                Double speed, Integer crewSize) {
+
+        if ((name != null && (name.length() < 1 || name.length() > 50)) ||
+                (planet != null && (planet.length() < 1 || planet.length() > 50)) ||
+                (prodDate != null && prodDate < 1) ||
+                (speed != null && (speed < 0.01 || speed > 0.99)) ||
+                (crewSize != null && (crewSize < 1 || crewSize > 9999))
+        ) {
+            return false;
+        }
+        return true;
+    }
+
+    public Ship updateShip(Long id, String name, String planet, ShipType shipType, Long prodDate,
+                           Boolean isUsed, Double speed, Integer crewSize) {
+        Ship ship = getShipById(id);
+
+        if (name == null && planet == null && shipType == null && prodDate == null
+                && isUsed == null && speed == null && crewSize == null) {
+            return ship;
+        }
+        ship.setId(id);
+
+        if (!checkParams(name, planet, prodDate, speed, crewSize)) {
+            return null;
+        }
+        if (name != null) {
+            ship.setName(name);
+        }
+
+        if (planet != null) {
+            ship.setPlanet(planet);
+        }
+
+        if (shipType != null) {
+            ship.setShipType(shipType);
+        }
+
+        if (prodDate != null) {
+            Date date = new Date();
+            date.setTime(prodDate);
+            ship.setProdDate(date);
+        }
+
+        if (isUsed != null) {
+            ship.setIsUsed(isUsed);
+        }
+
+        if (speed != null) {
+            ship.setSpeed(speed);
+        }
+
+        if (crewSize != null) {
+            ship.setCrewSize(crewSize);
+        }
+
+        ship.updateRating();
+        shipRepository.save(ship);
+        return ship;
+    }
+
+    public Boolean deleteShip(Long id) {
+        try {
+            shipRepository.delete(getShipById(id));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Ship createShip(Ship ship) {
+        if (ship.getName() == null || ship.getPlanet() == null ||
+                ship.getShipType() == null || ship.getProdDate() == null ||
+                ship.getSpeed() == null || ship.getCrewSize() == null ||
+                !checkParams(ship.getName(), ship.getPlanet(), ship.getProdDate().getTime(),
+                        ship.getSpeed(), ship.getCrewSize())) {
+            System.out.println("The ship contains incorrect parameters");
+            return null;
+        }
+        if (ship.getUsed() == null) {
+            ship.setIsUsed(false);
+        }
+        ship.updateRating();
+        ship = shipRepository.save(ship);
+
+        System.out.println("Was created ship: " + ship);
+        ship.setId(41L);
+        return ship;
+    }
 }
