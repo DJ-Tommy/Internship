@@ -63,7 +63,6 @@ public class ShipController {
     public Ship updateShip(@PathVariable Long id, @RequestBody Ship ship) {
         checkId(id);
         Ship editedShip = shipService.updateShip(id, ship.getName(), ship.getPlanet(), ship.getShipType(), ship.getProdDate() == null? null : ship.getProdDate().getTime(), ship.getUsed(), ship.getSpeed(), ship.getCrewSize());
-        System.out.println("EditedShip: " + editedShip);
         if (editedShip == null) {
             throw new BadRequestException();
         }
@@ -80,12 +79,10 @@ public class ShipController {
 
     @PostMapping("/rest/ships")
     public Ship createShip(@RequestBody Ship ship) {
-        System.out.println("Ship for adding: " + ship);
         Ship createdShip = shipService.createShip(ship);
         if (createdShip == null) {
             throw new BadRequestException();
         } else {
-            System.out.println("Created ship is: " + createdShip);
             return createdShip;
         }
     }

@@ -164,7 +164,6 @@ public class ShipService {
                 ship.getSpeed() == null || ship.getCrewSize() == null ||
                 !checkParams(ship.getName(), ship.getPlanet(), ship.getProdDate().getTime(),
                         ship.getSpeed(), ship.getCrewSize())) {
-            System.out.println("The ship contains incorrect parameters");
             return null;
         }
         if (ship.getUsed() == null) {
@@ -173,7 +172,6 @@ public class ShipService {
         ship.updateRating();
         ship = shipRepository.save(ship);
 
-        System.out.println("Was created ship: " + ship);
         ship.setId(41L);
         return ship;
     }
